@@ -19,7 +19,7 @@ class _CreateAccountState extends State<CreateAccount> {
       form.save();
       SnackBar snackbar = SnackBar(content: Text("Welcome $username!"),);
       _scaffold.currentState.showSnackBar(snackbar);
-      Timer(Duration(seconds: 2),(){
+      Timer(Duration(seconds: 1),(){
         Navigator.pop(context, username);
       });
     }

@@ -74,10 +74,15 @@ class _UploadState extends State<Upload> {
 
   Container buildSplashScreen(){
     return Container(
+      padding: EdgeInsets.only(left:40),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SvgPicture.asset('assets/images/upload.svg', height: 260,),
+          SizedBox(
+            height: 50,
+          ),
           Padding(
             padding: EdgeInsets.only(top: 20),
             child: RaisedButton(
@@ -91,7 +96,7 @@ class _UploadState extends State<Upload> {
                   fontSize: 22.0,
                 ),
               ),
-              color: Colors.deepOrange,
+              color: const Color(0xff6C63FF),
               onPressed: () => selectImage(context),
             ),
           )

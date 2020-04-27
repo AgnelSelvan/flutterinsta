@@ -100,6 +100,7 @@ class _PostState extends State<Post> {
           return circularProgress();
         }
         User user = User.fromDocument(snapshot.data);
+        bool isPostOwner = currentUserId == ownerId;
         return ListTile(
           leading: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(user.photoUrl),
@@ -114,13 +115,71 @@ class _PostState extends State<Post> {
             ),
           ),
           subtitle: Text(location),
-          trailing: IconButton(
-            onPressed: () => print("deleting post"),
+          trailing: isPostOwner ? IconButton(
+            onPressed: () => handleDeletePost(context),
             icon: Icon(Icons.more_vert),
-          ),
+          ) : Text(''),
         );
       },
     );
+  }
+
+  handleDeletePost(BuildContext parentContext){
+    return showDialog(
+      context: parentContext,
+      builder: (context){
+        return SimpleDialog(
+          title: Text("Remove this post?"),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text('Delete', style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                deletePost();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
+      }
+    );
+  }
+  deletePost() async {
+    postRef
+      .document(ownerId)
+      .collection('userPosts')
+      .document(postId)
+      .get().then((doc) {
+        if(doc.exists){
+          doc.reference.delete();
+        }
+      });
+    storageRef.child("post_$postId.jpg").delete();
+    QuerySnapshot activityFeedSnapshot = await ActivityFeedRef
+      .document(ownerId)
+      .collection("feedItems")
+      .where('postId', isEqualTo: postId)
+      .getDocuments();
+
+    activityFeedSnapshot.documents.forEach((doc) {
+      if(doc.exists){
+        doc.reference.delete();
+      }
+    });
+    
+    QuerySnapshot commentSnapshot = await commentsRef
+      .document(postId)
+      .collection("comments")
+      .getDocuments();
+    
+    commentSnapshot.documents.forEach((doc){
+      if(doc.exists){
+        doc.reference.delete();
+      }
+    });
+    Navigator.pop(context);
   }
 
   handleLikePost(){
@@ -201,7 +260,10 @@ class _PostState extends State<Post> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          cachedNetworkImage(mediaUrl),
+          Container(
+            height: 350,
+            child: CachedNetworkImage(imageUrl: mediaUrl),
+          ),
           showHeart 
             ?  Animator(
               duration: Duration(milliseconds: 300),
@@ -280,7 +342,7 @@ class _PostState extends State<Post> {
               Container(
                 margin: EdgeInsets.only(left: 20.0),
                 child: Text(
-                  "$username",
+                  "$username     ",
                   style:
                       TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                 ),

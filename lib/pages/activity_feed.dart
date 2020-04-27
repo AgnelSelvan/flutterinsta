@@ -35,7 +35,19 @@ class _ActivityFeedState extends State<ActivityFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText:"Activity Feed"),
+      appBar: AppBar(
+        title: Text(
+          "Activity Feed",
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Ubuntu',
+            fontSize: 25,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+        automaticallyImplyLeading: false,
+        centerTitle: true,  
+      ),
       body: Container(
         child: FutureBuilder(
           future: getActivityFeed(),

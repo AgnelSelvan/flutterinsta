@@ -20,7 +20,7 @@ class _SearchState extends State<Search> {
 
   handleSearch(String query){
     Future<QuerySnapshot> users = userRef
-      .where("displayName", isGreaterThanOrEqualTo: query)
+      .where("username", isGreaterThanOrEqualTo: query)
       .getDocuments();
     
     setState(() {
@@ -125,7 +125,7 @@ class UserResult extends StatelessWidget {
                 backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
               title: Text(
-                user.displayName,
+                user.username,
                 style: TextStyle(
                   color: Colors.black54,
                   fontWeight: FontWeight.bold

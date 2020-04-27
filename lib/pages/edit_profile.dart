@@ -4,6 +4,9 @@ import "package:flutter/material.dart";
 import 'package:flutter_insta/models/user.dart';
 import 'package:flutter_insta/pages/home.dart';
 import 'package:flutter_insta/widgets/progress.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice ='';
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -21,11 +24,50 @@ class _EditProfileState extends State<EditProfile> {
   bool _displayNameValid = true;
   bool _bioValid = true;
 
+
+  // static final MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
+  //   testDevices:<String>[],
+  //   keywords: <String>['social', 'walls', 'wallpaper'],
+  //   childDirected: true
+  // );
+
+  // BannerAd _bannerAd;
+  // InterstitialAd _interstitialAd;
+
+  // InterstitialAd createInterstitialAd(){
+  //   return new InterstitialAd(
+  //     adUnitId: 'ca-app-pub-7443590473977981/9420705939',
+  //     targetingInfo: targetingInfo,
+  //     listener: (MobileAdEvent event){
+  //       print('Banner evene:$event');
+  //     }
+  //   );
+  // }
+  // BannerAd createBannerAd(){
+  //   return new BannerAd(
+  //     adUnitId: 'ca-app-pub-7443590473977981/9612277626', 
+  //     size: AdSize.banner,
+  //     targetingInfo: targetingInfo,
+  //     listener: (MobileAdEvent event){
+  //       print('Banner evene:$event');
+  //     }
+  //   );
+  // }
+
   @override
   void initState() {
     // TODO: implement initState
     getUser();
     super.initState();
+    // FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-7443590473977981~4551522639');
+    // _bannerAd = createBannerAd()..load()..show();
+  }
+
+  @override
+  void dispose() {
+    // _bannerAd?.dispose();
+    // _interstitialAd.dispose();
+    super.dispose();
   }
 
   getUser() async {
@@ -34,7 +76,7 @@ class _EditProfileState extends State<EditProfile> {
     });
     DocumentSnapshot doc = await userRef.document(widget.currentUserId).get();
     user = User.fromDocument(doc);
-    displayNameController.text = user.displayName;
+    displayNameController.text = user.username;
     bioController.text = user.bio;
     setState(() {
       isLoading = false;
@@ -87,6 +129,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   updateProfileData(){
+    // createInterstitialAd()..load()..show();
      setState(() {
        displayNameController.text.trim().length < 3 || displayNameController.text.isEmpty ?
        _displayNameValid = false : _displayNameValid = true;
@@ -96,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
 
       if(_displayNameValid && _bioValid){
         userRef.document(widget.currentUserId).updateData({
-          "displayName": displayNameController.text,
+          "username": displayNameController.text,
           "bio": bioController.text,
         });
       }

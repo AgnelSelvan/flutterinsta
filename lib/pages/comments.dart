@@ -53,8 +53,8 @@ class CommentsState extends State<Comments> {
   }
 
   addCommentInActivityFeed(){
-    // bool isNotOwnerCurrent = postOwnerId != currentUser.id;
-    // if(isNotOwnerCurrent){
+    bool isNotOwnerCurrent = postOwnerId != currentUser.id;
+    if(isNotOwnerCurrent){
       ActivityFeedRef
         .document(postOwnerId)
         .collection('feedItems')
@@ -69,7 +69,7 @@ class CommentsState extends State<Comments> {
           "mediaUrl": postMediaUrl,
           "userProfileImg": currentUser.photoUrl
         });
-    // }
+    }
   }
 
   addComment(){

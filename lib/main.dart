@@ -15,13 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlutterShare',
+      title: 'Social Park',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        primaryColor: const Color(0xff6C63FF),
         accentColor: Colors.teal
       ),
       home: Home(),
     );
   }
+  
 }
